@@ -141,9 +141,9 @@ M.mason = {
 M.lsp = { signature = false }
 
 M.base46 = {
-  theme = "rosepine",
+  theme = "samtone",
   transparency = false,
-  theme_toggle = { "rosepine", "sunrise_breeze" },
+  theme_toggle = { "samtone", "sunrise_breeze" },
   hl_override = highlights.override,
   hl_add = highlights.add,
   integrations = {
