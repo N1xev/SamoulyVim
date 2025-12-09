@@ -16,7 +16,7 @@ function Clone-Repository {
 }
 
 # Main script
-$ConfigRepo = "https://github.com/N1xxev/SamoulyVim.git"
+$ConfigRepo = "https://github.com/N1xev/SamoulyVim.git"
 $ConfigPlugins = "$env:LOCALAPPDATA\nvim-data\lazy"
 $ConfigPath = "$env:LOCALAPPDATA\nvim"
 
