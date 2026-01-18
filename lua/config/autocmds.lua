@@ -6,14 +6,50 @@ vim.api.nvim_create_autocmd("ColorScheme", {
     local name = string.lower(vim.g.colors_name or ""):gsub(" ", "_")
     vim.fn.writefile({ name }, file)
 
-    -- Update tmux status bg/fg to match theme
+    -- Update tmux-status component colors to match theme
     if vim.env.TMUX then
-      local normal = vim.api.nvim_get_hl(0, { name = "Normal" })
-      local bg = normal.bg and string.format("#%06x", normal.bg) or "#000000"
-      local fg = normal.fg and string.format("#%06x", normal.fg) or "#ffffff"
-      vim.fn.system("tmux set -g status-bg '" .. bg .. "'")
-      vim.fn.system("tmux set -g status-fg '" .. fg .. "'")
+      local function get_color(hl_group, attr)
+        local hl = vim.api.nvim_get_hl(0, { name = hl_group })
+        return hl[attr] and string.format("#%06x", hl[attr]) or nil
+      end
+      local colors = {
+        window_active = {
+          fg = get_color("Directory", "fg") or get_color("Normal", "fg"),
+          bg = get_color("Normal", "bg"),
+        },
+        window_inactive = {
+          fg = get_color("Comment", "fg") or get_color("Normal", "fg"),
+          bg = get_color("Normal", "bg"),
+        },
+        window_inactive_recent = {
+          fg = get_color("LineNr", "fg") or get_color("Normal", "fg"),
+          bg = get_color("Normal", "bg"),
+        },
+        session = { fg = get_color("Title", "fg") or get_color("Normal", "fg"), bg = get_color("Normal", "bg") },
+        datetime = { fg = get_color("Special", "fg") or get_color("Normal", "fg"), bg = get_color("Normal", "bg") },
+        battery = { fg = get_color("WarningMsg", "fg") or get_color("Normal", "fg"), bg = get_color("Normal", "bg") },
+      }
+      require("tmux-status").setup({
+        sync_tmux_status = true,
+        window = {
+          separator = "⋮",
+          icon_zoom = "",
+          icon_mark = "",
+          icon_bell = "",
+          icon_mute = "",
+          icon_activity = "",
+          text = "dir",
+        },
+        session = { icon = "" },
+        datetime = { icon = "󱑍", format = "%a %d %b %k:%m" },
+        battery = { icon = "󰂎" },
+        colors = colors,
+        force_show = true,
+        manage_tmux_status = true,
+      })
     end
+
+    -- Note: Lualine colors update automatically on redraw
   end,
 })
 
