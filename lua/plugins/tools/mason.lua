@@ -19,7 +19,6 @@ return {
         "json-lsp",
         "lua-language-server",
         "markdown-toc",
-        "markdownlint-cli2",
         "marksman",
         "pyright",
         "rust-analyzer",
