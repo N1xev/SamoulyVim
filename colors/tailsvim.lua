@@ -1004,4 +1004,3 @@ hl(0, "Hlargs", { fg = p.orange_500 })
 
 -- Ensure cursor is always visible
 vim.opt.guicursor = "n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50"
-

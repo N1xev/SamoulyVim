@@ -15,6 +15,11 @@ return {
       local icons = LazyVim.config.icons
       local tmux_ok, tmux = pcall(require, "tmux-status")
 
+      local function get_color(hl_group, attr)
+        local hl = vim.api.nvim_get_hl(0, { name = hl_group })
+        return hl[attr] and string.format("#%06x", hl[attr]) or nil
+      end
+
       -- Helper to prevent errors when not in a Tmux session
       local function is_tmux()
         return tmux_ok and vim.env.TMUX ~= nil
@@ -135,39 +140,45 @@ return {
   {
     "christopher-francisco/tmux-status.nvim",
     cond = vim.env.TMUX ~= nil,
-    opts = {
-      sync_tmux_status = true,
-      window = {
-        separator = "⋮",
-        icon_zoom = "",
-        icon_mark = "",
-        icon_bell = "",
-        icon_mute = "",
-        icon_activity = "",
-        -- "dir" | "name" | "index_name"
-        -- if not listed above, text will be passed directly to tmux formatting
-        text = "dir",
-      },
-      session = {
-        icon = "",
-      },
-      datetime = {
-        icon = "󱑍",
-        format = "%a %d %b %k:%m",
-      },
-      battery = {
-        icon = "󰂎",
-      },
-      -- colors = {
-      --   window_active = { fg = "#e69875", bg = "#111827" },
-      --   window_inactive = { fg = "#859289", bg = "#111827" },
-      --   window_inactive_recent = { fg = "#3f5865", bg = "#111827" },
-      --   session = { fg = "#a7c080", bg = "#111827" },
-      --   datetime = { fg = "#7a8478", bg = "#111827" },
-      --   battery = { fg = "#7a8478", bg = "#111827" },
-      -- },
-      force_show = true, -- Force components to be shown regardless of Tmux status
-      manage_tmux_status = true, -- Set to false if you do NOT want the plugin to turn Tmux status on/off
-    },
+    opts = function()
+      local function get_color(hl_group, attr)
+        local hl = vim.api.nvim_get_hl(0, { name = hl_group })
+        return hl[attr] and string.format("#%06x", hl[attr]) or nil
+      end
+      return {
+        sync_tmux_status = true,
+        window = {
+          separator = "⋮",
+          icon_zoom = "",
+          icon_mark = "",
+          icon_bell = "",
+          icon_mute = "",
+          icon_activity = "",
+          -- "dir" | "name" | "index_name"
+          -- if not listed above, text will be passed directly to tmux formatting
+          text = "dir",
+        },
+        session = {
+          icon = "",
+        },
+        datetime = {
+          icon = "󱑍",
+          format = "%a %d %b %k:%m",
+        },
+        battery = {
+          icon = "󰂎",
+        },
+        colors = {
+          window_active = { fg = get_color("Directory", "fg") or get_color("Normal", "fg"), bg = get_color("Normal", "bg") },
+          window_inactive = { fg = get_color("Comment", "fg") or get_color("Normal", "fg"), bg = get_color("Normal", "bg") },
+          window_inactive_recent = { fg = get_color("LineNr", "fg") or get_color("Normal", "fg"), bg = get_color("Normal", "bg") },
+          session = { fg = get_color("Title", "fg") or get_color("Normal", "fg"), bg = get_color("Normal", "bg") },
+          datetime = { fg = get_color("Special", "fg") or get_color("Normal", "fg"), bg = get_color("Normal", "bg") },
+          battery = { fg = get_color("WarningMsg", "fg") or get_color("Normal", "fg"), bg = get_color("Normal", "bg") },
+        },
+        force_show = true, -- Force components to be shown regardless of Tmux status
+        manage_tmux_status = true, -- Set to false if you do NOT want the plugin to turn Tmux status on/off
+      }
+    end,
   },
 }

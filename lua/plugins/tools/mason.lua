@@ -5,7 +5,7 @@ return {
       ensure_installed = {
         "jdtls",
         "prettier",
-        "bacon-ls",
+
         "bash-language-server",
         "codelldb",
         "delve",

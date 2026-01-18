@@ -3,9 +3,6 @@ return {
     "neovim/nvim-lspconfig",
     opts = {
       servers = {
-        bacon_ls = {
-          enabled = diagnostics == "bacon-ls",
-        },
         rust_analyzer = { enabled = false },
       },
     },
@@ -24,7 +21,6 @@ return {
           end, { desc = "Rust Debuggables", buffer = bufnr })
         end,
         default_settings = {
-          -- rust-analyzer language server configuration
           ["rust-analyzer"] = {
             cargo = {
               allFeatures = true,
@@ -33,9 +29,7 @@ return {
                 enable = true,
               },
             },
-            -- Add clippy lints for Rust if using rust-analyzer
             checkOnSave = true,
-            -- Enable diagnostics if using rust-analyzer
             diagnostics = {
               enable = true,
             },
@@ -55,7 +49,6 @@ return {
                 "venv",
                 ".venv",
               },
-              -- Avoid Roots Scanned hanging, see https://github.com/rust-lang/rust-analyzer/issues/12613#issuecomment-2096386344
               watcher = "client",
             },
           },
