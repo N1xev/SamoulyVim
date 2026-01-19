@@ -22,9 +22,8 @@ Please follow these steps:
 1. **Preparation**:
    - Ensure that Neovim is not running.
    - Remove or move your current `nvim` directory (if it exists).
-
-   > [!TIP]
-   > The installer takes care of that already.
+> [!NOTE]
+> The installer takes care of Backing up your old nvim config or overwrites it.
 
 2. **Installation**:
    - On Linux/MacOS:
