@@ -14,6 +14,11 @@ Write-Host "==============================================" -ForegroundColor Cya
 
 $ErrorActionPreference = "Stop"
 
+if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
+    Write-Host "[ERROR] git is not installed" -ForegroundColor Red
+    exit 1
+}
+
 $pmCommand = $null
 if (Get-Command winget -ErrorAction SilentlyContinue) {
     $pmCommand = "winget install --silent"
@@ -33,13 +38,14 @@ foreach ($tool in $externalTools) {
         Invoke-Expression "$pmCommand $tool" | Out-Null
         Write-Host "  [OK] $tool installed" -ForegroundColor Green
     } catch {
-        Write-Host "  [ERROR] Failed to install $tool. Please install manually." -ForegroundColor Red
+        Write-Host "  [ERROR] Failed to install $tool" -ForegroundColor Red
+        exit 1
     }
 }
 
 $languages = @{
     "Go" = "Go.Go"
-    "Rust" = "Rustlang.Rust"
+    "Rust" = "Rustlang.Rustup"
     "Node.js" = "OpenJS.NodeJS"
     "Python" = "Python.Python.3"
 }
@@ -66,7 +72,8 @@ foreach ($sel in $selected) {
         Invoke-Expression "$pmCommand $pkg" | Out-Null
         Write-Host "  [OK] $sel installed" -ForegroundColor Green
     } catch {
-        Write-Host "  [ERROR] Failed to install $sel. Please install manually." -ForegroundColor Red
+        Write-Host "  [ERROR] Failed to install $sel" -ForegroundColor Red
+        exit 1
     }
 }
 
@@ -77,8 +84,12 @@ $RepoUrl = "https://github.com/N1xev/SamoulyVim.git"
 
 if (Test-Path $ConfigDir) {
     Write-Host "[WARN] Config directory $ConfigDir already exists." -ForegroundColor Yellow
-    $BackupChoice = Read-Host "Do you want to create a backup? (y/n)"
-    if ($BackupChoice -match "^[Yy]$") {
+    $reply = Read-Host "Do you want to (b)ackup, (o)verwrite, or (c)ancel? [b/o/c]"
+    
+    if ($reply -match "^[Cc]$") {
+        Write-Host "[INFO] Installation cancelled" -ForegroundColor Yellow
+        exit 0
+    } elseif ($reply -match "^[Bb]$") {
         $BackupDir = "${ConfigDir}_backup_$(Get-Date -Format 'yyyyMMdd_HHmmss')"
         Write-Host "  Creating backup to $BackupDir..." -ForegroundColor Blue
         Copy-Item -Path $ConfigDir -Destination $BackupDir -Recurse -Force
@@ -88,26 +99,20 @@ if (Test-Path $ConfigDir) {
             Write-Host "  [ERROR] Failed to create backup" -ForegroundColor Red
             exit 1
         }
-    }
-    if (Test-Path "$ConfigDir\.git") {
-        Write-Host "  Updating existing repo..." -ForegroundColor Blue
-        Push-Location $ConfigDir
-        git pull
-        if ($?) {
-            Pop-Location
-        } else {
-            Write-Host "  [ERROR] Failed to update repo" -ForegroundColor Red
-            Pop-Location
-            exit 1
-        }
-    } else {
-        Write-Host "  Removing existing directory and cloning..." -ForegroundColor Blue
         Remove-Item -Path $ConfigDir -Recurse -Force
-        git clone $RepoUrl $ConfigDir
-        if (-not $?) {
-            Write-Host "  [ERROR] Failed to clone repo" -ForegroundColor Red
-            exit 1
-        }
+    } elseif ($reply -match "^[Oo]$") {
+        Write-Host "  Removing existing directory..." -ForegroundColor Blue
+        Remove-Item -Path $ConfigDir -Recurse -Force
+    } else {
+        Write-Host "[ERROR] Invalid option. Installation cancelled." -ForegroundColor Red
+        exit 1
+    }
+    
+    Write-Host "  Cloning SamoulyVim..." -ForegroundColor Blue
+    git clone $RepoUrl $ConfigDir
+    if (-not $?) {
+        Write-Host "  [ERROR] Failed to clone repo" -ForegroundColor Red
+        exit 1
     }
 } else {
     Write-Host "  Cloning SamoulyVim..." -ForegroundColor Blue
