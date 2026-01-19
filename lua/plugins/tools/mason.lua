@@ -9,7 +9,6 @@ return {
         "bash-language-server",
         "codelldb",
         "delve",
-        "gitui",
         "gofumpt",
         "goimports",
         "golangci-lint",

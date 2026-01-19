@@ -31,10 +31,10 @@ if ! command -v git &>/dev/null; then
 fi
 
 if command -v paru &>/dev/null; then
-  PM="paru -S --noconfirm"
+  PM="paru -S --noconfirm --needed"
   echo -e "${GREEN}[OK] Detected paru package manager${NC}"
 elif command -v yay &>/dev/null; then
-  PM="yay -S --noconfirm"
+  PM="yay -S --noconfirm --needed"
   echo -e "${GREEN}[OK] Detected yay package manager${NC}"
 else
   echo -e "${RED}[ERROR] No AUR helper found. Please install paru or yay.${NC}"
@@ -50,8 +50,8 @@ if ! command -v fzf &>/dev/null; then
   echo -e "${GREEN}[OK] fzf installed${NC}"
 fi
 
-echo -e "${YELLOW}[PKG] Installing external tools: opencode, ripgrep, fd...${NC}"
-$PM opencode ripgrep fd || {
+echo -e "${YELLOW}[PKG] Installing external tools: opencode-bin, ripgrep, fd, lazygit...${NC}"
+$PM opencode-bin ripgrep fd lazygit || {
   echo -e "${RED}[ERROR] Failed to install external tools${NC}"
   exit 1
 }

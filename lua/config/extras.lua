@@ -13,7 +13,6 @@ return {
   { import = "lazyvim.plugins.extras.ui.dashboard-nvim" },
   { import = "lazyvim.plugins.extras.util.dot" },
   { import = "lazyvim.plugins.extras.util.gh" },
-  { import = "lazyvim.plugins.extras.util.gitui" },
   { import = "lazyvim.plugins.extras.util.mini-hipatterns" },
   { import = "lazyvim.plugins.extras.util.project" },
   { import = "lazyvim.plugins.extras.lang.git" },

@@ -31,8 +31,8 @@ if (Get-Command winget -ErrorAction SilentlyContinue) {
     exit 1
 }
 
-Write-Host "[PKG] Installing external tools: opencode, ripgrep, fd..." -ForegroundColor Yellow
-$externalTools = @("opencode", "ripgrep", "fd")
+Write-Host "[PKG] Installing external tools: opencode, ripgrep, fd, lazygit..." -ForegroundColor Yellow
+$externalTools = @("opencode", "ripgrep", "fd", "lazygit")
 foreach ($tool in $externalTools) {
     try {
         Invoke-Expression "$pmCommand $tool" | Out-Null

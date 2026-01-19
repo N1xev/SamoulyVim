@@ -23,6 +23,9 @@ Please follow these steps:
    - Ensure that Neovim is not running.
    - Remove or move your current `nvim` directory (if it exists).
 
+   > [!TIP]
+   > The installer takes care of that already.
+
 2. **Installation**:
    - On Linux/MacOS:
 
@@ -39,7 +42,7 @@ Please follow these steps:
 The installer will:
 
 - Detect your package manager (Linux: paru/yay, Windows: winget/choco)
-- Force install essential tools: opencode, ripgrep, fd
+- Force install essential tools: opencode, ripgrep, fd, lazygit
 - Let you select which languages to install: Go, Rust, Node.js, Python
 
 ### Manual Installation
@@ -48,28 +51,18 @@ If you prefer manual setup:
 
 #### Package Managers
 
-**Arch Linux with yay:**
-
 ```sh
-yay -S opencode ripgrep fd go rust nodejs python
-```
+# Arch Linux with yay:
+yay -S opencode ripgrep fd lazygit go rust nodejs python
 
-**Arch Linux with paru:**
+# Arch Linux with paru:
+paru -S opencode ripgrep fd lazygit go rust nodejs python
 
-```sh
-paru -S opencode ripgrep fd go rust nodejs python
-```
+# Windows with winget:
+winget install opencode ripgrep fd lazygit Go.Go Rustlang.Rust OpenJS.NodeJS Python.Python.3
 
-**Windows with winget:**
-
-```powershell
-winget install opencode ripgrep fd Go.Go Rustlang.Rust OpenJS.NodeJS Python.Python.3
-```
-
-**Windows with Chocolatey:**
-
-```powershell
-choco install opencode ripgrep fd go rust nodejs python
+# Windows with Chocolatey:
+choco install opencode ripgrep fd lazygit go rust nodejs python
 ```
 
 #### Neovim Setup
@@ -119,7 +112,7 @@ Refer to [LazyVim documentation](https://lazyvim.github.io/installation) for gen
 - `<leader>e`: Toggle nvim-tree
 - `<leader>o`: OpenCode commands
 - `<leader>f`: Telescope find files
-- `<leader>g`: Telescope live grep
+- `<leader>u`: UI related commands
 
 ## 🤝 Contributing
 
