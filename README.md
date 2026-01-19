@@ -77,7 +77,7 @@ choco install opencode ripgrep fd go rust nodejs python
 1. Clone this repository:
 
 ```bash
-git clone https://github.com/yourusername/SamoulyVim ~/.config/nvim
+git clone https://github.com/N1xev/SamoulyVim ~/.config/nvim
 ```
 
 2. Start Neovim:

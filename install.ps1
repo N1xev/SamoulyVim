@@ -70,4 +70,52 @@ foreach ($sel in $selected) {
     }
 }
 
-Write-Host "[DONE] Installation complete! Restart your terminal." -ForegroundColor Green
+Write-Host "[REPO] Setting up SamoulyVim config..." -ForegroundColor Magenta
+
+$ConfigDir = "$env:LOCALAPPDATA\nvim"
+$RepoUrl = "https://github.com/N1xev/SamoulyVim.git"
+
+if (Test-Path $ConfigDir) {
+    Write-Host "[WARN] Config directory $ConfigDir already exists." -ForegroundColor Yellow
+    $BackupChoice = Read-Host "Do you want to create a backup? (y/n)"
+    if ($BackupChoice -match "^[Yy]$") {
+        $BackupDir = "${ConfigDir}_backup_$(Get-Date -Format 'yyyyMMdd_HHmmss')"
+        Write-Host "  Creating backup to $BackupDir..." -ForegroundColor Blue
+        Copy-Item -Path $ConfigDir -Destination $BackupDir -Recurse -Force
+        if ($?) {
+            Write-Host "  [OK] Backup created" -ForegroundColor Green
+        } else {
+            Write-Host "  [ERROR] Failed to create backup" -ForegroundColor Red
+            exit 1
+        }
+    }
+    if (Test-Path "$ConfigDir\.git") {
+        Write-Host "  Updating existing repo..." -ForegroundColor Blue
+        Push-Location $ConfigDir
+        git pull
+        if ($?) {
+            Pop-Location
+        } else {
+            Write-Host "  [ERROR] Failed to update repo" -ForegroundColor Red
+            Pop-Location
+            exit 1
+        }
+    } else {
+        Write-Host "  Removing existing directory and cloning..." -ForegroundColor Blue
+        Remove-Item -Path $ConfigDir -Recurse -Force
+        git clone $RepoUrl $ConfigDir
+        if (-not $?) {
+            Write-Host "  [ERROR] Failed to clone repo" -ForegroundColor Red
+            exit 1
+        }
+    }
+} else {
+    Write-Host "  Cloning SamoulyVim..." -ForegroundColor Blue
+    git clone $RepoUrl $ConfigDir
+    if (-not $?) {
+        Write-Host "  [ERROR] Failed to clone repo" -ForegroundColor Red
+        exit 1
+    }
+}
+
+Write-Host "[DONE] SamoulyVim config ready! Run 'nvim' to start." -ForegroundColor Green
