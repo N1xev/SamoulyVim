@@ -118,9 +118,7 @@ return {
     "folke/snacks.nvim",
     opts = {
       explorer = { enabled = false },
-      picker = { explorer = { enabled = false } },
     },
-    -- Ensure Snacks doesn't bind <leader>e
     keys = {
       { "<leader>e", false },
       { "<leader>E", false },
