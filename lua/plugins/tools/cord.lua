@@ -2,23 +2,27 @@ return {
   "vyfor/cord.nvim",
   lazy = false,
   build = ":Cord update",
-  config = function()
-    --FIX: Buttons are not showing
-    require("cord").setup({
-      editor = {
-        client = "neovim",
-        tooltip = "SamoulyVim - The Superior Text Editor",
+  opts = {
+    usercmds = true,
+    editor = {
+      client = "neovim",
+      tooltip = "SamoulyVim - The Superior Text Editor",
+    },
+    display = {
+      theme = "catppuccin",
+      flavor = "accent",
+      show_time = true,
+      show_repository = true,
+    },
+    buttons = {
+      {
+        label = "Website",
+        url = "https://samouly.is-a.dev",
       },
-      display = {
-        theme = "catppuccin",
-        flavor = "accent",
+      {
+        label = "GithHub",
+        url = "https://github.com/N1xev",
       },
-      buttons = {
-        {
-          label = "Website",
-          url = "https://samouly.is-a.dev",
-        },
-      },
-    })
-  end,
+    },
+  },
 }
