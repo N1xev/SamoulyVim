@@ -50,8 +50,8 @@ if ! command -v fzf &>/dev/null; then
   echo -e "${GREEN}[OK] fzf installed${NC}"
 fi
 
-echo -e "${YELLOW}[PKG] Installing external tools: opencode-bin, ripgrep, fd, lazygit...${NC}"
-$PM opencode-bin ripgrep fd lazygit || {
+echo -e "${YELLOW}[PKG] Installing external tools: opencode-bin, github-cli, ripgrep, fd, lazygit...${NC}"
+$PM github-cli opencode-bin ripgrep fd lazygit || {
   echo -e "${RED}[ERROR] Failed to install external tools${NC}"
   exit 1
 }

@@ -22,8 +22,9 @@ Please follow these steps:
 1. **Preparation**:
    - Ensure that Neovim is not running.
    - Remove or move your current `nvim` directory (if it exists).
-> [!NOTE]
-> The installer takes care of Backing up your old nvim config or overwrites it.
+
+     > [!NOTE]
+     > The installer takes care of Backing up your old nvim config or overwrites it.
 
 2. **Installation**:
    - On Linux/MacOS:
@@ -80,6 +81,47 @@ nvim
 
 3. Lazy will automatically install all plugins and dependencies.
 
+## Some features need a manual setup.
+
+Currently i supported [gh-dash](https://gh-dash.dev) it have a [port](https://github.com/johnseth97/gh-dash.nvim) for neovim so its very good to add.
+
+### Prerequisites:
+
+its a github-cli plugin so we need to install `gh` first:
+
+```sh
+# Arch with yay
+yay -S github-cli
+
+# Arch with paru
+paru -S github-cli
+
+# windows with winget
+winget install Github.Cli
+
+# windows with Chocolatey
+choco install Github.cli
+```
+
+> [!WARNING]
+> you need to login with `gh auth login` with your github account to install any `gh` extension
+
+### gh-dash installation
+
+first we need to install it by `gh extension`
+
+```sh
+gh extension install dlvhdr/gh-dash
+```
+
+now you can test it in your terminal with:
+
+```sh
+gh dash
+```
+
+and in NeoVim with: `<leader>gu`
+
 ## Themes
 
 SamoulyVim includes multiple custom themes:
@@ -92,6 +134,7 @@ SamoulyVim includes multiple custom themes:
 - Samtone
 - Tailsvim
 - Volcanic Ash
+- and alot of other great themes, pick what makes your eyes comfortable :)
 
 Themes automatically sync with tmux colors. Switch themes with `:Telescope colorscheme` or `:colorscheme <theme>`.
 
