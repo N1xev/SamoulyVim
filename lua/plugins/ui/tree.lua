@@ -1,4 +1,5 @@
--- NOTE: File Explorer
+---@type LazySpec
+-- NOTE: File Tree and Explorer
 
 local function on_attach(bufnr)
   local api = require("nvim-tree.api")
@@ -14,13 +15,11 @@ local function on_attach(bufnr)
   vim.keymap.set("n", "<C-C>", api.tree.change_root_to_node, opts("CD"))
 end
 
--- NOTE: File Explorer
 return {
   {
     "nvim-tree/nvim-tree.lua",
     enabled = true,
     keys = {
-      -- Example keybinds
       { "<leader>e", "<cmd>NvimTreeToggle<CR>", desc = "Explorer" },
     },
     cmd = {
@@ -30,10 +29,19 @@ return {
       "NvimTreeFindFile",
       "NvimTreeFindFileToggle",
     },
+    init = function()
+      vim.api.nvim_create_autocmd("VimEnter", {
+        callback = function()
+          if vim.fn.isdirectory(vim.fn.expand("%")) == 1 then
+            require("nvim-tree.api").tree.open()
+          end
+        end,
+      })
+    end,
     opts = {
       on_attach = on_attach,
-      hijack_cursor = true, -- Moved inside opts
-      sync_root_with_cwd = true, -- Moved inside opts
+      hijack_cursor = true,
+      sync_root_with_cwd = true,
       hijack_netrw = true,
       diagnostics = {
         enable = true,
@@ -51,7 +59,7 @@ return {
         timeout = 5000,
       },
       view = {
-        side = "right", -- This moves the tree to the right
+        side = "right",
         width = 30,
         preserve_window_proportions = true,
       },
@@ -111,8 +119,6 @@ return {
         },
       },
     },
-    hijack_cursor = true,
-    sync_root_with_cwd = true,
   },
   {
     "folke/snacks.nvim",
