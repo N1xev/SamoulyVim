@@ -1,12 +1,12 @@
--- Save last colorscheme and update tmux status colors
+local group = vim.api.nvim_create_augroup("SamoulyVim", { clear = true })
+
 vim.api.nvim_create_autocmd("ColorScheme", {
+  group = group,
   callback = function()
-    -- Save colorscheme
     local file = vim.fn.stdpath("data") .. "/last_colorscheme"
     local name = string.lower(vim.g.colors_name or ""):gsub(" ", "_")
     vim.fn.writefile({ name }, file)
 
-    -- Update tmux-status component colors to match theme
     if vim.env.TMUX then
       local function get_color(hl_group, attr)
         local hl = vim.api.nvim_get_hl(0, { name = hl_group })
@@ -47,17 +47,6 @@ vim.api.nvim_create_autocmd("ColorScheme", {
         force_show = true,
         manage_tmux_status = true,
       })
-    end
-
-    -- Note: Lualine colors update automatically on redraw
-  end,
-})
-
--- Auto-open nvim-tree when opening a directory
-vim.api.nvim_create_autocmd("VimEnter", {
-  callback = function()
-    if vim.fn.isdirectory(vim.fn.expand("%")) == 1 then
-      require("nvim-tree.api").tree.open()
     end
   end,
 })
