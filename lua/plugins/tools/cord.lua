@@ -1,3 +1,6 @@
+---@type LazySpec
+-- NOTE: Discord Rich Presence
+
 return {
   "vyfor/cord.nvim",
   lazy = false,

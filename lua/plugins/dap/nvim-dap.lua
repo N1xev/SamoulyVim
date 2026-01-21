@@ -1,3 +1,6 @@
+---@type LazySpec
+-- NOTE: Debugging support (DAP)
+
 return {
   "mfussenegger/nvim-dap",
   recommended = true,

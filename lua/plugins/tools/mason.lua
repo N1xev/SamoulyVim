@@ -4,17 +4,8 @@ return {
     opts = {
       ensure_installed = {
         "jdtls",
-        "prettier",
-
         "bash-language-server",
         "codelldb",
-        "delve",
-        "gofumpt",
-        "goimports",
-        "golangci-lint",
-        "gomodifytags",
-        "gopls",
-        "impl",
         "json-lsp",
         "lua-language-server",
         "markdown-toc",
@@ -26,9 +17,6 @@ return {
         "stylua",
         "tailwindcss-language-server",
         "tree-sitter-cli",
-        "vtsls",
-        "vue-language-server",
-        "rust-analyzer",
       },
     },
   },

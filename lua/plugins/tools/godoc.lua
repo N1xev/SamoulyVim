@@ -1,3 +1,5 @@
+local group = vim.api.nvim_create_augroup("Godoc", { clear = true })
+
 return {
   "fredrikaverpil/godoc.nvim",
   version = "*",
@@ -11,7 +13,6 @@ return {
           install_info = {
             url = "https://github.com/fredrikaverpil/tree-sitter-godoc",
             files = { "src/parser.c" },
-            version = "*",
           },
           filetype = "godoc",
         }
@@ -21,6 +22,7 @@ return {
 
         -- Enable :TSInstall godoc, :TSUpdate godoc
         vim.api.nvim_create_autocmd("User", {
+          group = group,
           pattern = "TSUpdate",
           callback = function()
             require("nvim-treesitter.parsers").godoc = parser_config
@@ -29,6 +31,7 @@ return {
 
         -- Enable godoc filetype for .godoc files (optional)
         vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+          group = group,
           pattern = "*.godoc",
           callback = function()
             vim.bo.filetype = "godoc"

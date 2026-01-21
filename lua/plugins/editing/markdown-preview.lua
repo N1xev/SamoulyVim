@@ -1,3 +1,6 @@
+---@type LazySpec
+-- NOTE: Markdown preview in browser
+
 return {
   "iamcco/markdown-preview.nvim",
   cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },

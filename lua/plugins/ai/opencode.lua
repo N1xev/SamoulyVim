@@ -1,6 +1,8 @@
+---@type LazySpec
+-- NOTE: OpenCode AI agent integration
 return {
   "sudo-tee/opencode.nvim",
-  lazy = false, -- Load immediately instead of lazily
+  lazy = false,
 
   config = function()
     local wk = require("which-key")
@@ -10,8 +12,8 @@ return {
     })
 
     require("opencode").setup({
-      preferred_picker = nil, -- 'telescope', 'fzf', 'mini.pick', 'snacks', 'select', if nil, it will use the best available picker. Note mini.pick does not support multiple selections
-      preferred_completion = nil, -- 'blink', 'nvim-cmp','vim_complete' if nil, it will use the best available completion
+      preferred_picker = "snacks",
+      preferred_completion = "blink",
       default_global_keymaps = true, -- If false, disables all default global keymaps
       default_mode = "build", -- 'build' or 'plan' or any custom configured. @see [OpenCode Agents](https://opencode.ai/docs/modes/)
       keymap_prefix = "<leader>o", -- Default keymap prefix for global keymaps change to your preferred prefix and it will be applied to all keymaps starting with <leader>o
@@ -232,13 +234,7 @@ return {
       },
       ft = { "markdown", "Avante", "copilot-chat", "opencode_output" },
     },
-    -- Optional, for file mentions and commands completion, pick only one
-    "hrsh7th/nvim-cmp",
-
     -- Optional, for file mentions picker, pick only one
     "folke/snacks.nvim",
-    -- 'nvim-telescope/telescope.nvim',
-    -- 'ibhagwan/fzf-lua',
-    -- 'nvim_mini/mini.nvim',
   },
 }
