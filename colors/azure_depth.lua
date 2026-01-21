@@ -762,6 +762,3 @@ hl(0, "RainbowDelimiterOrange", { fg = p.orange })
 hl(0, "RainbowDelimiterGreen", { fg = p.sage })
 hl(0, "RainbowDelimiterViolet", { fg = p.purple })
 hl(0, "RainbowDelimiterCyan", { fg = p.cyan })
-
--- Final cursor configuration
-vim.opt.guicursor = "n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50"
