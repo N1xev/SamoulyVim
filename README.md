@@ -14,6 +14,11 @@
 
 - Neovim >= 0.9.5
 - Tmux >= 3.2 (optional, for tmux integration)
+- `gcc`, `make`, `clang` for Mason to compile and build LSPs
+
+> [!WARNING]
+> for language specific LSPs you need to install its stuff for example NodeJS related LSPs needs npm to be installed
+> list of needed language specific deps: `npm/nodejs`, `go`, `gcc`, `make`, `unzip`, `tar`.
 
 ### Quick install
 

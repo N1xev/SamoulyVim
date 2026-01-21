@@ -66,6 +66,20 @@ return {
         return header
       end
 
+      local header_cmd
+      local is_windows = vim.fn.has("win32") == 1
+
+      if is_windows then
+        -- Windows version using PowerShell
+        header_cmd =
+          [[powershell.exe -NoProfile -Command "Write-Host ('$([char]27)[31m ▀ █ █ ▀ $([char]27)[0m $([char]27)[32m ▀ █ █ ▀ $([char]27)[0m $([char]27)[33m ▀ █ █ ▀ $([char]27)[0m $([char]27)[34m ▀ █ █ ▀ $([char]27)[0m $([char]27)[35m ▀ █ █ ▀ $([char]27)[0m $([char]27)[36m ▀ █ █ ▀ $([char]27)[0m'); Write-Host ('$([char]27)[31m ██   ██ $([char]27)[0m $([char]27)[32m ██   ██ $([char]27)[0m $([char]27)[33m ██   ██ $([char]27)[0m $([char]27)[34m ██   ██ $([char]27)[0m $([char]27)[35m ██   ██ $([char]27)[0m $([char]27)[36m ██   ██ $([char]27)[0m'); Write-Host ('$([char]27)[31m ▄ █ █ ▄ $([char]27)[0m $([char]27)[32m ▄ █ █ ▄ $([char]27)[0m $([char]27)[33m ▄ █ █ ▄ $([char]27)[0m $([char]27)[34m ▄ █ █ ▄ $([char]27)[0m $([char]27)[35m ▄ █ █ ▄ $([char]27)[0m $([char]27)[36m ▄ █ █ ▄ $([char]27)[0m')"]]
+      else
+        -- Linux/macOS version using printf
+        header_cmd =
+          [[printf "\033[31m ▀ █ █ ▀ \033[0m \033[32m ▀ █ █ ▀ \033[0m \033[33m ▀ █ █ ▀ \033[0m \033[34m ▀ █ █ ▀ \033[0m \033[35m ▀ █ █ ▀ \033[0m \033[36m ▀ █ █ ▀ \033[0m\n\033[31m ██   ██ \033[0m \033[32m ██   ██ \033[0m \033[33m ██   ██ \033[0m \033[34m ██   ██ \033[0m \033[35m ██   ██ \033[0m \033[36m ██   ██ \033[0m\n\033[31m ▄ █ █ ▄ \033[0m \033[32m ▄ █ █ ▄ \033[0m \033[33m ▄ █ █ ▄ \033[0m \033[34m ▄ █ █ ▄ \033[0m \033[35m ▄ █ █ ▄ \033[0m \033[36m ▄ █ █ ▄ \033[0m\n"]]
+      end
+      -- Then set your dashboard command to
+
       return {
         ---@class snacks.dashboard.Config
         dashboard = {
@@ -124,8 +138,9 @@ return {
             {
               pane = 2,
               section = "terminal",
-              cmd = vim.fn.has("win32") == 1 and "echo ''" or "colorscript -e square",
-              height = 8,
+              cmd = header_cmd,
+              height = 9,
+              align = "center",
               padding = 1,
             },
             { section = "keys", gap = 1, padding = 1 },
