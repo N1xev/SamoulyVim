@@ -1,3 +1,5 @@
+---@type LazySpec
+-- NOTE: Which-key configuration
 
 return {
   {
@@ -6,7 +8,8 @@ return {
       spec = {
         { "<leader>T", group = "terminal" }, -- Labels your new terminal group
         { "<leader>o", group = "opencode" }, -- Renames the "o" group to "opencode"
+        { "<leader>P", group = "plugins" },
       },
     },
-  }
+  },
 }

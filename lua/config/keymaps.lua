@@ -1,3 +1,33 @@
--- Keymaps are automatically loaded on the VeryLazy event
--- Default keymaps that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/keymaps.lua
--- Add any additional keymaps here
+---@type LazyVimConfig
+
+vim.keymap.del("n", "<leader>l")
+vim.keymap.del("n", "<leader>L")
+
+vim.keymap.set("n", "<leader>Pl", "<cmd>Lazy<cr>", { desc = "Lazy" })
+vim.keymap.set("n", "<leader>PL", "<cmd>LazyExtras<cr>", { desc = "Lazy Extras" })
+vim.keymap.set("n", "<leader>Pc", "<cmd>LazyVimChangelog<cr>", { desc = "LazyVim Changelog" })
+
+vim.keymap.set({ "n", "v", "i" }, "<RightMouse>", function()
+  local mousepos = vim.fn.getmousepos()
+
+  if mousepos.screenrow == 1 then
+    return vim.cmd.exec('"normal! \\<RightMouse>"')
+  end
+
+  if mousepos.winid == 0 then
+    return vim.cmd.exec('"normal! \\<RightMouse>"')
+  end
+
+  local buf = vim.api.nvim_win_get_buf(mousepos.winid)
+  local ft = vim.bo[buf].filetype
+
+  if ft == "snacks_dashboard" or ft == "alpha" or ft == "dashboard" then
+    return vim.cmd.exec('"normal! \\<RightMouse>"')
+  end
+
+  require("menu.utils").delete_old_menus()
+
+  vim.cmd.exec('"normal! \\<RightMouse>"')
+
+  vim.cmd("OpenSmartMenu")
+end, { desc = "Right click menu" })
