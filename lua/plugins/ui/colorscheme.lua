@@ -14,13 +14,16 @@ return {
   {
     "rose-pine/neovim",
     name = "rose-pine",
+    lazy = true,
   },
   {
     "nyoom-engineering/oxocarbon.nvim",
+    lazy = true,
   },
   {
     "catppuccin/nvim",
     name = "catppuccin",
+    lazy = true,
     opts = {
       term_colors = true,
       color_overrides = {
@@ -34,8 +37,10 @@ return {
   },
   {
     "uhs-robert/oasis.nvim",
+    lazy = true,
   },
   {
     "dasupradyumna/midnight.nvim",
+    lazy = true,
   },
 }

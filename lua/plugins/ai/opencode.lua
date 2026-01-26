@@ -2,8 +2,7 @@
 -- NOTE: OpenCode AI agent integration
 return {
   "sudo-tee/opencode.nvim",
-  lazy = false,
-
+  event = "VeryLazy",
   config = function()
     local wk = require("which-key")
 

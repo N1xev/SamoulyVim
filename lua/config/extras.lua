@@ -1,6 +1,6 @@
 return {
   { import = "lazyvim.plugins.extras.coding.blink" },
-  { import = "lazyvim.plugins.extras.coding.yanky" },
+  { import = "lazyvim.plugins.extras.coding.yanky", keys = { "<leader>p", "<leader>y" } },
   { import = "lazyvim.plugins.extras.editor.dial" },
   { import = "lazyvim.plugins.extras.editor.inc-rename" },
   { import = "lazyvim.plugins.extras.editor.mini-diff" },

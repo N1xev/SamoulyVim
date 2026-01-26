@@ -6,6 +6,13 @@ vim.keymap.del("n", "<leader>L")
 vim.keymap.set("n", "<leader>Pl", "<cmd>Lazy<cr>", { desc = "Lazy" })
 vim.keymap.set("n", "<leader>PL", "<cmd>LazyExtras<cr>", { desc = "Lazy Extras" })
 vim.keymap.set("n", "<leader>Pc", "<cmd>LazyVimChangelog<cr>", { desc = "LazyVim Changelog" })
+vim.keymap.set("n", "<leader>Pb", function()
+  require("core.utils").bootstrap_project()
+end, { desc = "Bootstrap Project" })
+
+vim.keymap.set("n", "<leader>cx", function()
+  require("core.utils").run_code()
+end, { desc = "Run Code" })
 
 vim.keymap.set({ "n", "v", "i" }, "<RightMouse>", function()
   local mousepos = vim.fn.getmousepos()
