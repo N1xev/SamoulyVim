@@ -27,8 +27,9 @@ Please follow these steps:
 1. **Preparation**:
    - Ensure that Neovim is not running.
    - Remove or move your current `nvim` directory (if it exists).
-  > [!NOTE]
-  > The installer takes care of Backing up your old nvim config or overwrites it.
+
+> [!NOTE]
+> The installer takes care of Backing up your old nvim config or overwrites it.
 
 2. **Installation**:
    - On Linux/MacOS:
@@ -48,6 +49,56 @@ The installer will:
 - Detect your package manager (Linux: paru/yay, Windows: winget/choco)
 - Force install essential tools: opencode, ripgrep, fd, lazygit
 - Let you select which languages to install: Go, Rust, Node.js, Python
+
+### Nix/OS Installation
+
+Since i have flake.nix file we can install it with some ways:
+
+- test it with `nix run`:
+
+```sh
+nix run github:N1xev/SamoulyVim
+```
+
+- the flakes way:
+
+1. in your flake.nix:
+
+```nix
+{
+  inputs = {
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    samoulyvim.url = "github:N1xev/SamoulyVim";
+  };
+
+  # ... inside your outputs
+}
+```
+
+2. add it to your home.packages:
+
+```nix
+home.packages = [
+  inputs.samoulyvim.packages.${pkgs.system}.default
+];
+```
+
+After switching your home-manager config, run `samoulyvim` in your terminal.
+
+- installing it system-wide:
+
+1. add it as flakes input as shown above
+
+2. add it to your `configuration.nix`:
+
+```nix
+environment.systemPackages = [
+  inputs.samoulyvim.packages.${pkgs.system}.default
+];
+```
+
+> [!NOTE]
+> Currently the config goes into your `/nix/store` and we have an isolated binary `samoulyvim`
 
 ### Manual Installation
 
