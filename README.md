@@ -83,7 +83,7 @@ home.packages = [
 ];
 ```
 
-After switching your home-manager config, run `samoulyvim` in your terminal.
+After switching your home-manager config, run `slvim` in your terminal.
 
 - installing it system-wide:
 
