@@ -11,12 +11,12 @@ NC='\033[0m'
 
 echo -e "${BLUE}"
 cat <<'EOF'
- ██╗ ██╗     ██╗   ██╗██╗███╗   ███╗   
-████████╗    ██║   ██║██║████╗ ████║   
-╚██╔═██╔╝    ██║   ██║██║██╔████╔██║   
-████████╗    ╚██╗ ██╔╝██║██║╚██╔╝██║   
-╚██╔═██╔╝     ╚████╔╝ ██║██║ ╚═╝ ██║██╗
- ╚═╝ ╚═╝       ╚═══╝  ╚═╝╚═╝     ╚═╝╚═╝
+ ██╗ ██╗      ██╗   ██╗██╗███╗   ███╗   
+████████╗     ██║   ██║██║████╗ ████║   
+╚██╔═██╔╝     ██║   ██║██║██╔████╔██║   
+████████╗     ╚██╗ ██╔╝██║██║╚██╔╝██║   
+╚██╔═██╔╝      ╚████╔╝ ██║██║ ╚═╝ ██║██╗
+ ╚═╝ ╚═╝        ╚═══╝  ╚═╝╚═╝     ╚═╝╚═╝
 EOF
 echo -e "${NC}"
 
@@ -84,7 +84,7 @@ REPO_URL="https://github.com/N1xev/SamoulyVim.git"
 
 if [ -d "$CONFIG_DIR" ]; then
   echo -e "${YELLOW}[WARN] Config directory $CONFIG_DIR already exists.${NC}"
-  read -p "Do you want to (b)ackup, (o)verwrite, or (c)ancel? [b/o/c]: " -n 1 -r
+  read -p "Do you want to (b)ackup, (o)verwrite, or (c)ancel? [b/o/c]: " -n 1 -r </dev/tty
   echo
 
   if [[ $REPLY =~ ^[Cc]$ ]]; then
