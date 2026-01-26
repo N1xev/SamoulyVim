@@ -23,9 +23,6 @@ echo -e "${NC}"
 echo -e "${CYAN}[START] SamoulyVim Dependency Installer for Linux${NC}"
 echo -e "${CYAN}===========================================${NC}"
 
-# Remove the global trap so we can handle errors manually in our function
-# trap 'echo -e "${RED}[ERROR] Installation failed!${NC}"; exit 1' ERR
-
 if ! command -v git &>/dev/null; then
   echo -e "${RED}[ERROR] git is not installed${NC}"
   exit 1
@@ -43,7 +40,7 @@ else
   exit 1
 fi
 
-# --- NEW FUNCTION TO HANDLE CONFLICTS ---
+# --- FUNCTION TO HANDLE CONFLICTS ---
 install_safe() {
   local pkgs="$@"
   local install_cmd="$PM_CMD -S --noconfirm --needed $pkgs"
@@ -51,7 +48,6 @@ install_safe() {
   echo -e "${YELLOW}[PKG] Attempting to install: $pkgs${NC}"
 
   # Try automatic install first.
-  # We use 'if !' so 'set -e' doesn't kill the script on failure.
   if ! $install_cmd; then
     echo -e "${RED}[ERROR] Automatic installation failed for: $pkgs${NC}"
     echo -e "${YELLOW}This usually happens due to package conflicts (e.g. opencode vs opencode-bin).${NC}"
@@ -61,19 +57,19 @@ install_safe() {
       echo "  (r) Retry interactively (allows resolving conflicts manually)"
       echo "  (s) Skip this package and continue"
       echo "  (e) Exit installer"
+      # Forces read to use the keyboard
       read -p "Selection [r/s/e]: " -n 1 -r </dev/tty
       echo
 
       case $REPLY in
       [Rr]*)
         echo -e "${BLUE}  Retrying interactively... (Answer 'y' to replace conflicts)${NC}"
-        # Run without --noconfirm
+        # Forces the package manager to use the keyboard
         if $PM_CMD -S --needed $pkgs </dev/tty; then
           echo -e "${GREEN}[OK] $pkgs installed successfully${NC}"
           return 0
         else
           echo -e "${RED}[ERROR] Interactive retry failed.${NC}"
-          # Loop continues to let user decide again
         fi
         ;;
       [Ss]*)
@@ -98,14 +94,14 @@ if ! command -v fzf &>/dev/null; then
 fi
 
 echo -e "${YELLOW}[PKG] Installing external tools: opencode-bin, github-cli, ripgrep, fd, lazygit...${NC}"
-# We pass them individually or as a group. Group is better, but if one fails, we retry the group.
 install_safe github-cli opencode-bin ripgrep fd lazygit
 
 languages=("Go:go" "Rust:rustup" "Node.js:nodejs npm" "Python:python python-pip")
 
 echo -e "${PURPLE}[TOOLS] Select languages to install (use TAB/Space to select, Enter to confirm):${NC}"
-# Use < /dev/tty for fzf to ensure it grabs keyboard input correctly
-selected=$(printf '%s\n' "${languages[@]}" | fzf --multi --header "Supported Languages" --color=fg:#d0d0d0,bg:#121212,hl:#5f87af --color=fg+:#d0d0d0,bg+:#262626,hl+:#5fd7ff --color=info:#afaf87,prompt:#d7005f,pointer:#af5fff --color=marker:#87ff00,spinner:#af5fff,header:#87afaf </dev/tty || true)
+
+# --- FIXED LINE BELOW: REMOVED < /dev/tty SO THE PIPE WORKS AGAIN ---
+selected=$(printf '%s\n' "${languages[@]}" | fzf --multi --header "Supported Languages" --color=fg:#d0d0d0,bg:#121212,hl:#5f87af --color=fg+:#d0d0d0,bg+:#262626,hl+:#5fd7ff --color=info:#afaf87,prompt:#d7005f,pointer:#af5fff --color=marker:#87ff00,spinner:#af5fff,header:#87afaf || true)
 
 if [ -z "$selected" ]; then
   echo -e "${YELLOW}[WARN] No languages selected.${NC}"
