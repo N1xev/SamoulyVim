@@ -23,60 +23,99 @@ echo -e "${NC}"
 echo -e "${CYAN}[START] SamoulyVim Dependency Installer for Linux${NC}"
 echo -e "${CYAN}===========================================${NC}"
 
-trap 'echo -e "${RED}[ERROR] Installation failed!${NC}"; exit 1' ERR
+# Remove the global trap so we can handle errors manually in our function
+# trap 'echo -e "${RED}[ERROR] Installation failed!${NC}"; exit 1' ERR
 
 if ! command -v git &>/dev/null; then
   echo -e "${RED}[ERROR] git is not installed${NC}"
   exit 1
 fi
 
+# Define Package Manager Base Command
 if command -v paru &>/dev/null; then
-  PM="paru -S --noconfirm --needed"
+  PM_CMD="paru"
   echo -e "${GREEN}[OK] Detected paru package manager${NC}"
 elif command -v yay &>/dev/null; then
-  PM="yay -S --noconfirm --needed"
+  PM_CMD="yay"
   echo -e "${GREEN}[OK] Detected yay package manager${NC}"
 else
   echo -e "${RED}[ERROR] No AUR helper found. Please install paru or yay.${NC}"
   exit 1
 fi
 
+# --- NEW FUNCTION TO HANDLE CONFLICTS ---
+install_safe() {
+  local pkgs="$@"
+  local install_cmd="$PM_CMD -S --noconfirm --needed $pkgs"
+
+  echo -e "${YELLOW}[PKG] Attempting to install: $pkgs${NC}"
+
+  # Try automatic install first.
+  # We use 'if !' so 'set -e' doesn't kill the script on failure.
+  if ! $install_cmd; then
+    echo -e "${RED}[ERROR] Automatic installation failed for: $pkgs${NC}"
+    echo -e "${YELLOW}This usually happens due to package conflicts (e.g. opencode vs opencode-bin).${NC}"
+
+    while true; do
+      echo -e "${PURPLE}How would you like to proceed?${NC}"
+      echo "  (r) Retry interactively (allows resolving conflicts manually)"
+      echo "  (s) Skip this package and continue"
+      echo "  (e) Exit installer"
+      read -p "Selection [r/s/e]: " -n 1 -r </dev/tty
+      echo
+
+      case $REPLY in
+      [Rr]*)
+        echo -e "${BLUE}  Retrying interactively... (Answer 'y' to replace conflicts)${NC}"
+        # Run without --noconfirm
+        if $PM_CMD -S --needed $pkgs </dev/tty; then
+          echo -e "${GREEN}[OK] $pkgs installed successfully${NC}"
+          return 0
+        else
+          echo -e "${RED}[ERROR] Interactive retry failed.${NC}"
+          # Loop continues to let user decide again
+        fi
+        ;;
+      [Ss]*)
+        echo -e "${YELLOW}[WARN] Skipping $pkgs${NC}"
+        return 0
+        ;;
+      [Ee]*)
+        echo -e "${RED}[FATAL] Installation aborted by user.${NC}"
+        exit 1
+        ;;
+      *) echo "Please enter r, s, or e." ;;
+      esac
+    done
+  else
+    echo -e "${GREEN}[OK] $pkgs installed successfully${NC}"
+  fi
+}
+
 if ! command -v fzf &>/dev/null; then
   echo -e "${YELLOW}[PKG] Installing fzf for selection interface...${NC}"
-  $PM fzf || {
-    echo -e "${RED}[ERROR] Failed to install fzf${NC}"
-    exit 1
-  }
-  echo -e "${GREEN}[OK] fzf installed${NC}"
+  install_safe fzf
 fi
 
 echo -e "${YELLOW}[PKG] Installing external tools: opencode-bin, github-cli, ripgrep, fd, lazygit...${NC}"
-$PM github-cli opencode-bin ripgrep fd lazygit || {
-  echo -e "${RED}[ERROR] Failed to install external tools${NC}"
-  exit 1
-}
-echo -e "${GREEN}[OK] External tools installed${NC}"
+# We pass them individually or as a group. Group is better, but if one fails, we retry the group.
+install_safe github-cli opencode-bin ripgrep fd lazygit
 
 languages=("Go:go" "Rust:rustup" "Node.js:nodejs npm" "Python:python python-pip")
 
 echo -e "${PURPLE}[TOOLS] Select languages to install (use TAB/Space to select, Enter to confirm):${NC}"
-selected=$(printf '%s\n' "${languages[@]}" | fzf --multi --header "Supported Languages" --color=fg:#d0d0d0,bg:#121212,hl:#5f87af --color=fg+:#d0d0d0,bg+:#262626,hl+:#5fd7ff --color=info:#afaf87,prompt:#d7005f,pointer:#af5fff --color=marker:#87ff00,spinner:#af5fff,header:#87afaf || true)
+# Use < /dev/tty for fzf to ensure it grabs keyboard input correctly
+selected=$(printf '%s\n' "${languages[@]}" | fzf --multi --header "Supported Languages" --color=fg:#d0d0d0,bg:#121212,hl:#5f87af --color=fg+:#d0d0d0,bg+:#262626,hl+:#5fd7ff --color=info:#afaf87,prompt:#d7005f,pointer:#af5fff --color=marker:#87ff00,spinner:#af5fff,header:#87afaf </dev/tty || true)
 
 if [ -z "$selected" ]; then
-  echo -e "${YELLOW}[WARN] No languages selected. Exiting.${NC}"
-  exit 0
+  echo -e "${YELLOW}[WARN] No languages selected.${NC}"
+else
+  echo -e "${YELLOW}[PKG] Installing selected languages...${NC}"
+  while IFS= read -r sel; do
+    pkg=$(echo "$sel" | cut -d: -f2)
+    install_safe $pkg
+  done <<<"$selected"
 fi
-
-echo -e "${YELLOW}[PKG] Installing selected languages...${NC}"
-while IFS= read -r sel; do
-  pkg=$(echo "$sel" | cut -d: -f2)
-  echo -e "${BLUE}  Installing $pkg...${NC}"
-  $PM $pkg || {
-    echo -e "${RED}[ERROR] Failed to install $pkg${NC}"
-    exit 1
-  }
-  echo -e "${GREEN}  [OK] $pkg installed${NC}"
-done <<<"$selected"
 
 echo -e "${PURPLE}[REPO] Setting up SamoulyVim config...${NC}"
 CONFIG_DIR="$HOME/.config/nvim"
