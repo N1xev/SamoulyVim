@@ -98,7 +98,7 @@ environment.systemPackages = [
 ```
 
 > [!NOTE]
-> Currently the config goes into your `/nix/store` and we have an isolated binary `samoulyvim`
+> Currently the config goes into your `/nix/store` and we have an isolated binary `slvim`
 
 ### Manual Installation
 

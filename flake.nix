@@ -65,11 +65,9 @@
           export XDG_DATA_HOME="$HOME/.local/share/slvim"
           export XDG_STATE_HOME="$HOME/.local/state/slvim"
 
-          # Ensure the config exists in the home directory
           if [ ! -f "$HOME/.config/slvim/init.lua" ]; then
             echo "Initializing SamoulyVim config in $HOME/.config/slvim..."
             mkdir -p "$HOME/.config/slvim"
-            # Use -n to not overwrite if files already exist, but ensure we get everything
             cp -rf ${configFiles}/slvim/. "$HOME/.config/slvim/"
             chmod -R u+w "$HOME/.config/slvim"
           fi
