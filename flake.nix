@@ -24,8 +24,8 @@
         name = "slvim-config";
         src = ./.;
         installPhase = ''
-          mkdir -p $out
-          cp -r init.lua lua colors lazy-lock.json lazyvim.json stylua.toml $out/
+          mkdir -p $out/slvim
+          cp -r init.lua lua colors lazy-lock.json lazyvim.json stylua.toml $out/slvim/
         '';
       };
 
@@ -61,9 +61,17 @@
 
         text = ''
           export NVIM_APPNAME="slvim"
-          export XDG_CONFIG_HOME="${configFiles}/.."
+          export XDG_CONFIG_HOME="$HOME/.config"
           export XDG_DATA_HOME="$HOME/.local/share/slvim"
           export XDG_STATE_HOME="$HOME/.local/state/slvim"
+
+          # Ensure the config exists in the home directory
+          if [ ! -d "$HOME/.config/slvim" ]; then
+            echo "Initializing SamoulyVim config in $HOME/.config/slvim..."
+            mkdir -p "$HOME/.config/slvim"
+            cp -r ${configFiles}/slvim/. "$HOME/.config/slvim/"
+            chmod -R u+w "$HOME/.config/slvim"
+          fi
 
           exec nvim "$@"
         '';
