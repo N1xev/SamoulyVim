@@ -1,10 +1,8 @@
 ---@type LazyVimConfig
--- NOTE: Native Neovim options and global settings
--- Concealing (for markdown, latex, etc)
-vim.opt.conceallevel = 2 -- Set to 0 to see `` in markdown files
 
--- Session options
+vim.opt.conceallevel = 2
 vim.opt.sessionoptions = "buffers,curdir,tabpages,winsize,help,globals,skiprtp,folds"
+vim.opt.wrap = false
 
 -- Set default shell
 vim.opt.shell = vim.fn.has("win32") == 1 and "powershell" or "bash"

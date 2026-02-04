@@ -34,7 +34,7 @@ return {
       offsets = {
         {
           filetype = "NvimTree",
-          text = "Garden",
+          text = "WorkSpace",
           separator = true,
           text_align = "center",
         },
