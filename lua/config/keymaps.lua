@@ -14,6 +14,10 @@ vim.keymap.set("n", "<leader>cx", function()
   require("core.utils").run_code()
 end, { desc = "Run Code" })
 
+vim.keymap.set({ "n", "v", "i" }, "<leader>cp", "<cmd>OpenSmartMenu<cr>", {
+  desc = "Open context menu",
+})
+
 vim.keymap.set({ "n", "v", "i" }, "<RightMouse>", function()
   local mousepos = vim.fn.getmousepos()
 
