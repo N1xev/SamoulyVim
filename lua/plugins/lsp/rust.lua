@@ -1,7 +1,6 @@
 ---@type LazySpec
 -- NOTE: Rust language support (Rustaceanvim)
----@type LazySpec
--- NOTE: Rust language support (Rustaceanvim)
+
 return {
   {
     "neovim/nvim-lspconfig",
